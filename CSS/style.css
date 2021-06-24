@@ -35,3 +35,25 @@ td{
     color: white;
 }
 
+@media screen and (max-width: 580px){
+    .titulo {
+        margin-left: 100px;
+    font-size:30px;  
+    }
+    .mover {
+        margin-left:175px;
+    
+    }
+    .h2{
+        margin-left: 50px;
+        position:-webkit-sticky;
+    }
+    
+
+}
+@media screen and (min-width: 581px) and (max-width: 1500px){
+    .titulo {
+        margin-left: 100px;
+    font-size:50px;  
+    }
+}

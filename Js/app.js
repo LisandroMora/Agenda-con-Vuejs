@@ -2,6 +2,7 @@ const app = new Vue({
     el: '#app',
     data: {
         contactos: [],
+        Fcontactos: [],
         NombreContacto: '',
         ApellidoContacto: '',
         TelefonoContacto: '',
@@ -9,7 +10,16 @@ const app = new Vue({
         EditApellidoContacto: '',
         EditTelefonoContacto: '',
         Indice: '',
-        Validos: false
+        Busqueda: '',
+        Validos: false,
+        DatosLS: JSON.parse(localStorage.getItem('ListaContactos')),
+    },
+
+    created(){
+        let DatosLS = JSON.parse(localStorage.getItem('ListaContactos'));
+        if(DatosLS !== null){
+            this.contactos = DatosLS;
+        }
     },
 
     methods: {
@@ -28,6 +38,19 @@ const app = new Vue({
             
         },
 
+        Buscar: function(){
+            let nombre;
+            this.Fcontactos = [...this.contactos];
+            this.contactos = [];
+            this.Fcontactos.forEach(contact => {
+                nombre = contact.Nombre.toLowerCase();
+                if (nombre.indexOf(this.Busqueda.toLowerCase())!==-1){
+                    this.contactos.push(contact);
+                }
+            });
+            if(this.Busqueda === '') this.contactos = this.DatosLS;
+        },
+
         Clear: function () {
 			this.NombreContacto = '';
 			this.ApellidoContacto = '';
@@ -36,14 +59,17 @@ const app = new Vue({
 			this.EditApellidoContacto = '';
 			this.EditTelefonoContacto = '';
 		},
-
         
         EliminarContacto: function(index){
-            this.contactos.splice(index,1);
+            this.Indice = index;
+        },
+        
+        CEliminar: function(){
+            this.contactos.splice(this.Indice,1);
             localStorage.setItem('ListaContactos', JSON.stringify(this.contactos));
             document.elementFromPoint(10, 10).click();
         },
-        
+
         EditarContacto: function (index){
             this.EditNombreContacto = this.contactos[index].Nombre;
             this.EditApellidoContacto = this.contactos[index].Apellido;
@@ -73,12 +99,5 @@ const app = new Vue({
             else this.Validos = true; 
         },
 
-    },
-    
-    created() {
-        let DatosLS = JSON.parse(localStorage.getItem('ListaContactos'));
-        if(DatosLS !== null){
-            this.contactos = DatosLS;
-        }
     },
 });
